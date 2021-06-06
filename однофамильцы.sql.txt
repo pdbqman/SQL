@@ -1,4 +1,4 @@
-select e.id from Emp e
+ï»¿select e.id from Emp e
 where regexp_substr(e.fio,'[^ ]+',1,1)in 
 (
   select f from(
@@ -25,7 +25,7 @@ where regexp_substr(e.fio,'[^ ]+',1,1)in
 --      count(regexp_substr(u.c_name,'[^ ]+',1,1)) as cnt 
 --    from Z#user u 
 --    where u.c_filial = 1985880
---          --and u.c_name not like '%Òåõïîëüçîâàòåëü%'
+--          --and u.c_name not like '%Ð¢ÐµÑ…Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ%'
 --    group by 
 --          regexp_substr(u.c_name,'[^ ]+',1,1)
 --    having count(regexp_substr(u.c_name,'[^ ]+',1,1)) > 2
