@@ -1,0 +1,33 @@
+select e.id from Emp e
+where regexp_substr(e.fio,'[^ ]+',1,1)in 
+(
+  select f from(
+    select 
+      regexp_substr(u.fio,'[^ ]+',1,1) as f,
+      count(regexp_substr(u.fio,'[^ ]+',1,1)) as cnt 
+    from Emp u 
+    where u.category = 2
+    group by 
+          regexp_substr(u.fio,'[^ ]+',1,1)
+    having count(regexp_substr(u.fio,'[^ ]+',1,1)) > 2
+  )
+);
+
+
+
+--select c.id, /*c.c_name*/ from Z#user c
+--where
+--regexp_substr(c.c_name,'[^ ]+',1,1)in 
+--(
+--  select f from(
+--    select 
+--      regexp_substr(u.c_name,'[^ ]+',1,1) as f,
+--      count(regexp_substr(u.c_name,'[^ ]+',1,1)) as cnt 
+--    from Z#user u 
+--    where u.c_filial = 1985880
+--          --and u.c_name not like '%Техпользователь%'
+--    group by 
+--          regexp_substr(u.c_name,'[^ ]+',1,1)
+--    having count(regexp_substr(u.c_name,'[^ ]+',1,1)) > 2
+--  )
+--);

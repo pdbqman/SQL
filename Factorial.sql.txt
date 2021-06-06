@@ -1,0 +1,83 @@
+declare
+  n pls_integer; -- число, факториал которого будем искать   
+
+  function factorial(n pls_integer) -- функция для вычисления факториала числа
+    return varchar2
+    as
+    f_sum number := 1;    -- факториал числа без нулей вконце  
+    e_sum number := 0;    -- сумма нулей
+    res varchar2(32000);  -- результирующее значение
+  begin 
+    if n = 1 or n = 0 then
+      res := 1; 
+    elsif n < 0 then
+      res := 'Задано отрицательное число!';
+    else  
+      for i in 1..n loop
+         f_sum := f_sum * i; -- вычисляем факториал
+         if rtrim(f_sum,'0') <> f_sum then  -- если произошла замена начинаем считать
+            e_sum := e_sum + length(f_sum) - length(rtrim(f_sum,'0')); -- количество нулей
+            f_sum := rtrim(f_sum,'0'); -- без нулей    
+            --DBMS_OUTPUT.put_line( i || '! = ' || f_sum );
+         end if;
+      end loop;
+      
+      if to_char(to_number(f_sum||'e+'||e_sum)) <> '~' then -- если полученное число не бесконечно то выведем его, что бы не выводить Е+
+         res   := to_number(f_sum||'E+'||e_sum);
+      else  -- что бы было математически эстетично выведем в формате 9.99E+99
+         e_sum := e_sum + length(f_sum) - 1; -- узнаем на сколько надо сдвинуть 
+         res   := to_char(substr(f_sum,1,1),'FM9D')||substr(f_sum,2)||'E+'||e_sum; 
+      end if; 
+    end if; 
+    
+    return res;
+  end;
+begin   
+    n := dbms_random.value(1,1000000);
+    n := &1;  
+    DBMS_OUTPUT.put_line('n = ' || n );  
+    
+    DBMS_OUTPUT.put_line(n || '! = ' || factorial(n));
+end;
+/*
+declare
+  n pls_integer; -- число, факториал которого будем искать  
+  f_sum number := 1;
+begin
+  n := &1;  
+  DBMS_OUTPUT.put_line('n = ' || n );
+  for i in 1..n loop
+      f_sum := f_sum*i;         
+      DBMS_OUTPUT.put_line( i || '! = ' || f_sum );
+  end loop; 
+end;
+*/
+/*
+declare
+  n pls_integer; -- число, факториал которого будем искать
+  
+  function Factorial(i pls_integer) 
+  return number
+  as
+    F number;
+  begin
+    F := i;
+    if i > 1 then   
+      F := F * Factorial(i-1);
+    end if;
+
+    return F;
+  end; 
+begin
+  n := dbms_random.value(1,35);
+  --n := &1;  
+  DBMS_OUTPUT.enable;
+  DBMS_OUTPUT.put_line('n = ' || n );
+  DBMS_OUTPUT.put_line('Factorial(n) = ' || factorial(n) );
+end;
+*/
+
+/*
+select EXP(SUM(LN(level))) factorial
+from dual connect by level <= &factorial_number
+*/
